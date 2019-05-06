@@ -5,10 +5,7 @@ import datalayer.dbConnection.BasicDBConnectionPool;
 import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class AllSkills {
@@ -31,8 +28,13 @@ public class AllSkills {
                 Connection conn = sqlInstance.get();
                 for (int i = 0; i < allskills.size(); i++) {
                     try {
-                        Statement stmt = conn.createStatement();
-                        stmt.executeUpdate("INSERT INTO Skill VALUES (i,allskills.get(i).getName())");
+                        PreparedStatement prepStmt = conn.prepareStatement("insert into Skill values ("+
+                                        i+1+","+ allskills.get(i).getName() );
+                        prepStmt.executeUpdate();
+//                        Statement stmt = conn.createStatement();
+//                        stmt.executeQuery("INSERT" +
+//                                " INTO Skill" +
+//                                " VALUES (i+1,allskills.get(i).getName())");
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -64,7 +66,7 @@ public class AllSkills {
             Statement stmt =conn.createStatement();
             ResultSet rs =stmt.executeQuery("select count (*) FROM Skill ");
             sqlInstance.release(conn);
-            if (rs.toString().equals("0")){
+            if (rs.getString("count (*)").equals("0")){
                 return false;
             }
             else {
