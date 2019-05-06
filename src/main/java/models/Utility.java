@@ -96,7 +96,7 @@ public class Utility {
         Connection conn = sqlInstance.get();
         for (JSONObject projasn : projectlist) {
             ArrayList<Object> resultdata = jsonparser(new ArrayList<>(Arrays.asList("id", "title"
-                    , "description", "imageURL", "deadline", "skills", "budget","creationDate")), projasn);
+                    , "description", "imageUrl", "deadline", "skills", "budget","creationDate")), projasn);
             try {
                 PreparedStatement prepStmt = conn.prepareStatement("insert into Project (id, title, description, imgURL, budget, deadline,creationDate) VALUES (?,?,?,?,?,?,?)");
                 prepStmt.setString(1,(String) resultdata.get(0));
