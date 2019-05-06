@@ -12,7 +12,7 @@ public class ConnectionPool {
 
     public static SQLiteBasicDBConnectionPool getInstance() {
         if (instance == null) {
-            instance = new SQLiteBasicDBConnectionPool(1, 4 , dbURL);
+            instance = new SQLiteBasicDBConnectionPool(1, 40 , dbURL);
         }
         return instance;
     }
