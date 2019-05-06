@@ -35,8 +35,8 @@ public class Utility {
     }
 //    @SuppressWarnings("unchecked")
     public Register getDefultUser(String path)throws FileNotFoundException {
-        JSONTokener tokener = new JSONTokener(new FileReader("D:/University/3971-2/IE/Projects/3/CA3/ca3/ca1/defultuser.json"));
-//        JSONTokener tokener = new JSONTokener(new FileReader(path));
+//        JSONTokener tokener = new JSONTokener(new FileReader("D:/University/3971-2/IE/Projects/3/CA3/ca3/ca1/defultuser.json"));
+        JSONTokener tokener = new JSONTokener(new FileReader(path));
         JSONObject object = new JSONObject(tokener);
         ArrayList <Object> info = jsonparser(new ArrayList<>(Arrays.asList("id", "firstName", "lastName"
                                                 , "jobTitle", "profilePictureURL", "skills", "bio")),object);
