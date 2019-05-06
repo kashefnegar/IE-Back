@@ -1,9 +1,10 @@
 package models;
 
 import datalayer.ConnectionPool;
-import datalayer.dbConnectionPool.BasicDBConnectionPool;
-import datalayer.dbConnectionPool.impl.SQLiteBasicDBConnectionPool;
-import datalayer.dbConnectionPool.impl.SQLiteBasicDBConnectionPool;
+import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
+import datalayer.dbConnection.BasicDBConnectionPool;
+import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
+import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
 
 import java.io.IOException;
 import java.sql.*;
@@ -67,7 +68,7 @@ public class AllSkills {
             Statement stmt =conn.createStatement();
             ResultSet rs =stmt.executeQuery("select count (*) FROM Skill ");
             sqlInstance.release(conn);
-            if (rs.toString().equals("0")){
+            if (rs.getString("count (*)").equals("0")){
                 return false;
             }
             else {

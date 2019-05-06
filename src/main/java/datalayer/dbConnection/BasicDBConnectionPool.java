@@ -1,4 +1,6 @@
-package datalayer.dbConnectionPool;
+package datalayer.dbConnection;
+
+import datalayer.DBCPDBConnectionPool;
 
 import java.sql.Connection;
 
@@ -8,10 +10,10 @@ import java.sql.Connection;
  *
  * implementing connection-pool from scratch is not best choice!
  *
- * @see dataLayer.DBCPDBConnectionPool
+ * @see DBCPDBConnectionPool
  *
  * */
-public abstract class BasicDBConnectionPool implements ResourcePool<Connection> {
+public abstract class BasicDBConnectionPool implements datalayer.dbConnectionPool.ResourcePool<Connection> {
 
     private int minConnections;
     private int maxConnections;
@@ -21,7 +23,7 @@ public abstract class BasicDBConnectionPool implements ResourcePool<Connection> 
                                     int maxConnections,
                                     String dbUrl) {
         if (minConnections <= 0 || maxConnections <= 0 || maxConnections < minConnections)
-            throw new DBConnectionPoolException("invalid connections size config.");
+            throw new datalayer.dbConnection.DBConnectionPoolException("invalid connections size config.");
 
         this.dbUrl = dbUrl;
         this.minConnections = minConnections;

@@ -1,9 +1,9 @@
-package datalayer.dbConnectionPool.impl;
+package datalayer.dbConnection.impl;
 
 
 
-import datalayer.dbConnectionPool.BasicDBConnectionPool;
-import datalayer.dbConnectionPool.DBConnectionPoolException;
+import datalayer.dbConnection.BasicDBConnectionPool;
+import datalayer.dbConnection.DBConnectionPoolException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -42,10 +42,15 @@ public class SQLiteBasicDBConnectionPool extends BasicDBConnectionPool {
 
     private Connection createConnection() {
         try {
+            Class.forName("org.sqlite.JDBC");
             return DriverManager.getConnection(getDbUrl());
-        } catch (SQLException e) {
+        } catch (SQLException e ) {
             throw new DBConnectionPoolException("error in connection to db: " + e.getMessage());
         }
+        catch (ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public Connection get() {

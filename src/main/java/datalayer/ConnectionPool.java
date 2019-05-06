@@ -1,8 +1,8 @@
 package datalayer;
 
 
-import datalayer.dbConnectionPool.BasicDBConnectionPool;
-import datalayer.dbConnectionPool.impl.SQLiteBasicDBConnectionPool;
+import datalayer.dbConnection.BasicDBConnectionPool;
+import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
 
 public class ConnectionPool {
 
