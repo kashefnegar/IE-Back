@@ -7,6 +7,6 @@ public class user_page_tool {
     private int state;
 
     public void UserPageTool(String id){
-        if()
+//        if()
     }
 }
