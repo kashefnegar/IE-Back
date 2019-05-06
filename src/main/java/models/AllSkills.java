@@ -66,7 +66,7 @@ public class AllSkills {
             Statement stmt =conn.createStatement();
             ResultSet rs =stmt.executeQuery("select count (*) FROM Skill ");
             sqlInstance.release(conn);
-            if (rs.getString("count (*)").equals("0")){
+            if (rs.toString().equals("0")){
                 return false;
             }
             else {
