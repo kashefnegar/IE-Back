@@ -1,5 +1,6 @@
 package servlet.mytools;
 
+import datalayer.getProjectControler;
 import models.AllSkills;
 import models.MyUser;
 import models.Projects;
@@ -31,7 +32,9 @@ public class StartupScriptLauncher implements ServletContextListener{
         AllSkills incSkills = AllSkills.getInstance();
         incSkills.setUrl("http://142.93.134.194:8000/joboonja/skill");
         incSkills.setAllskills();
-        myProjects.get_project_url("http://142.93.134.194:8000/joboonja/project");
+        getProjectControler round = new getProjectControler();
+        round.beepForAnHour();
+//        myProjects.get_project_url("http://142.93.134.194:8000/joboonja/project");
         System.out.println("Hi");
     }
 

@@ -1,5 +1,7 @@
 package models;
 
+import datalayer.ConnectionPool;
+import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,6 +9,10 @@ import org.json.JSONTokener;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -51,6 +57,7 @@ public class Utility {
                         resultdata.add(object.getInt(aData));
                         break;
                     case "deadline":
+                    case "creationDate":
                         resultdata.add(object.getLong(aData));
                         break;
                     default:
@@ -85,13 +92,66 @@ public class Utility {
     @SuppressWarnings("unchecked")
     public ArrayList<Project> getprject(ArrayList<JSONObject> projectlist) {
         ArrayList<Project> project = new ArrayList<>();
+        SQLiteBasicDBConnectionPool sqlInstance = ConnectionPool.getInstance();
+        Connection conn = sqlInstance.get();
         for (JSONObject projasn : projectlist) {
             ArrayList<Object> resultdata = jsonparser(new ArrayList<>(Arrays.asList("id", "title"
-                    , "description", "imageURL", "deadline", "skills", "budget")), projasn);
+                    , "description", "imageURL", "deadline", "skills", "budget","creationDate")), projasn);
+            try {
+                PreparedStatement prepStmt = conn.prepareStatement("insert into Project (id, title, description, imgURL, budget, deadline,creationDate) VALUES (?,?,?,?,?,?,?)");
+                prepStmt.setString(1,(String) resultdata.get(0));
+                prepStmt.setString(2,(String) resultdata.get(1));
+                prepStmt.setString(3,(String) resultdata.get(2));
+                prepStmt.setString(4,(String) resultdata.get(3));
+                prepStmt.setLong(5,(long) resultdata.get(4));
+                prepStmt.setInt(6,(int) resultdata.get(6));
+                prepStmt.setLong(7,(long) resultdata.get(7));
+                prepStmt.executeUpdate();
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            for (int i=0; i<((ArrayList<Skills>)resultdata.get(5)).size() ; i++){
+                try {
+                    PreparedStatement prepStmt = conn.prepareStatement("insert into ProjectSkill (ProjectID, SkillID, Point)VALUES (?,?,?)");
+                    prepStmt.setString(1,(String) resultdata.get(0));
+                    int id=get_skilid((((ArrayList<Skills>) resultdata.get(5)).get(i).getName()));
+                    if(id!=-1) {
+                        prepStmt.setInt(2,id);
+                    }
+                    else continue;
+                    prepStmt.setInt(3,((ArrayList<Skills>) resultdata.get(5)).get(i).getPoints()) ;
+                    prepStmt.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
             project.add(new Project((String) resultdata.get(0), (String) resultdata.get(1), (String) resultdata.get(2)
                     , (String) resultdata.get(3), (long) resultdata.get(4)
                     , (ArrayList<Skills>) resultdata.get(5), (int) resultdata.get(6)));
         }
+        sqlInstance.release(conn);
         return project;
+    }
+    public int get_skilid(String name) {
+        SQLiteBasicDBConnectionPool sqlInstance = ConnectionPool.getInstance();
+        Connection conn = sqlInstance.get();
+        try {
+            PreparedStatement prepStmt = conn.prepareStatement("select id FROM Skill where name=?");
+            prepStmt.setString(1,name);
+            ResultSet rs = prepStmt.executeQuery();
+            sqlInstance.release(conn);
+            return rs.getInt("id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sqlInstance.release(conn);
+            return -1;
+
+        }
+
     }
 }
