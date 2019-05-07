@@ -92,11 +92,13 @@ public class Utility {
     @SuppressWarnings("unchecked")
     public ArrayList<Project> getprject(ArrayList<JSONObject> projectlist) {
         ArrayList<Project> project = new ArrayList<>();
-        SQLiteBasicDBConnectionPool sqlInstance = ConnectionPool.getInstance();
-        Connection conn = sqlInstance.get();
         for (JSONObject projasn : projectlist) {
+
+            SQLiteBasicDBConnectionPool sqlInstance = ConnectionPool.getInstance();
+            Connection conn = sqlInstance.get();
             ArrayList<Object> resultdata = jsonparser(new ArrayList<>(Arrays.asList("id", "title"
                     , "description", "imageUrl", "deadline", "skills", "budget","creationDate")), projasn);
+            System.out.println((String) resultdata.get(0));
             try {
                 PreparedStatement prepStmt = conn.prepareStatement("insert into Project (id, title, description, imgURL, budget, deadline,creationDate) VALUES (?,?,?,?,?,?,?)");
                 prepStmt.setString(1,(String) resultdata.get(0));
@@ -112,19 +114,33 @@ public class Utility {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            finally {
+                sqlInstance.release(conn);
+            }
             for (int i=0; i<((ArrayList<Skills>)resultdata.get(5)).size() ; i++){
+                System.out.println(i);
+                SQLiteBasicDBConnectionPool sqlInstance1 = ConnectionPool.getInstance();
+                Connection conn1 = sqlInstance1.get();
                 try {
-                    PreparedStatement prepStmt = conn.prepareStatement("insert into ProjectSkill (ProjectID, SkillID, Point)VALUES (?,?,?)");
+
+                    PreparedStatement prepStmt = conn1.prepareStatement("insert into ProjectSkill (ProjectID, SkillID, Point)VALUES (?,?,?)");
                     prepStmt.setString(1,(String) resultdata.get(0));
                     int id=get_skilid((((ArrayList<Skills>) resultdata.get(5)).get(i).getName()));
                     if(id!=-1) {
                         prepStmt.setInt(2,id);
                     }
-                    else continue;
+                    else{
+                        sqlInstance1.release(conn1);
+                        continue;
+
+                    }
                     prepStmt.setInt(3,((ArrayList<Skills>) resultdata.get(5)).get(i).getPoints()) ;
                     prepStmt.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
+                }
+                finally {
+                    sqlInstance1.release(conn1);
                 }
 
             }
@@ -134,7 +150,7 @@ public class Utility {
                     , (String) resultdata.get(3), (long) resultdata.get(4)
                     , (ArrayList<Skills>) resultdata.get(5), (int) resultdata.get(6)));
         }
-        sqlInstance.release(conn);
+//        sqlInstance.release(conn);
         return project;
     }
     public int get_skilid(String name) {
