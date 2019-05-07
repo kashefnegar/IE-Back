@@ -115,22 +115,22 @@ public class Utility {
                 e.printStackTrace();
             }
             finally {
-                sqlInstance.release(conn);
+//                sqlInstance.release(conn);
             }
             for (int i=0; i<((ArrayList<Skills>)resultdata.get(5)).size() ; i++){
                 System.out.println(i);
-                SQLiteBasicDBConnectionPool sqlInstance1 = ConnectionPool.getInstance();
-                Connection conn1 = sqlInstance1.get();
+//                SQLiteBasicDBConnectionPool sqlInstance1 = ConnectionPool.getInstance();
+//                Connection conn1 = sqlInstance1.get();
                 try {
 
-                    PreparedStatement prepStmt = conn1.prepareStatement("insert into ProjectSkill (ProjectID, SkillID, Point)VALUES (?,?,?)");
+                    PreparedStatement prepStmt = conn.prepareStatement("insert into ProjectSkill (ProjectID, SkillID, Point)VALUES (?,?,?)");
                     prepStmt.setString(1,(String) resultdata.get(0));
                     int id=get_skilid((((ArrayList<Skills>) resultdata.get(5)).get(i).getName()));
                     if(id!=-1) {
                         prepStmt.setInt(2,id);
                     }
                     else{
-                        sqlInstance1.release(conn1);
+                        sqlInstance.release(conn);
                         continue;
 
                     }
@@ -140,7 +140,7 @@ public class Utility {
                     e.printStackTrace();
                 }
                 finally {
-                    sqlInstance1.release(conn1);
+//                    sqlInstance1.release(conn1);
                 }
 
             }
@@ -149,8 +149,9 @@ public class Utility {
             project.add(new Project((String) resultdata.get(0), (String) resultdata.get(1), (String) resultdata.get(2)
                     , (String) resultdata.get(3), (long) resultdata.get(4)
                     , (ArrayList<Skills>) resultdata.get(5), (int) resultdata.get(6)));
+            sqlInstance.release(conn);
         }
-//        sqlInstance.release(conn);
+
         return project;
     }
     public int get_skilid(String name) {
