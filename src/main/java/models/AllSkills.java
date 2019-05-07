@@ -31,7 +31,7 @@ public class AllSkills {
 
                 for (int i = 0; i < allskills.size(); i++) {
                     try {
-                        PreparedStatement prepStmt = conn.prepareStatement("insert into Skill (id, name) VALUES (?,? )");
+                        PreparedStatement prepStmt = conn.prepareStatement("insert into Skill (id, name) VALUES (?,? ,?)");
                         prepStmt.setInt(1,i+1);
                         prepStmt.setString(2,allskills.get(i).getName());
                         prepStmt.executeUpdate();
