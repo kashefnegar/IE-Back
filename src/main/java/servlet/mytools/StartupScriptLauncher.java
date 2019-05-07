@@ -20,11 +20,11 @@ public class StartupScriptLauncher implements ServletContextListener{
         myProjects = Projects.getInstance();
         Utility myUtl = new Utility();
         try {
-//            myUser.adduser(myUtl.getDefultUser("/Users/md/Desktop/collage/IE/CA1/IE_1/hi/ca1/defultuser.json"));
-            myUser.adduser(myUtl.getDefultUser("D:/University/3971-2/IE/Projects/3/CA3/ca3/ca1/defultuser.json"));
+            myUser.adduser(myUtl.getDefultUser("/Users/md/Desktop/collage/IE/CA1/IE_1/hi/ca1/defultuser.json"));
+//            myUser.adduser(myUtl.getDefultUser("D:/University/3971-2/IE/Projects/3/CA3/ca3/ca1/defultuser.json"));
             System.out.println("Hi2");
-//            myUser.adduser(myUtl.getDefultUser("/Users/md/Desktop/collage/IE/CA1/IE_1/hi/ca1/defultuser2.json"));
-            myUser.adduser(myUtl.getDefultUser("D:/University/3971-2/IE/Projects/3/CA3/ca3/ca1/defultuser.json"));
+            myUser.adduser(myUtl.getDefultUser("/Users/md/Desktop/collage/IE/CA1/IE_1/hi/ca1/defultuser2.json"));
+//            myUser.adduser(myUtl.getDefultUser("D:/University/3971-2/IE/Projects/3/CA3/ca3/ca1/defultuser.json"));
             System.out.println("hi3");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
