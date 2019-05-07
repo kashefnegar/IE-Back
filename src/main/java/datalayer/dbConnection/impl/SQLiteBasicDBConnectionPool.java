@@ -74,8 +74,14 @@ public class SQLiteBasicDBConnectionPool extends BasicDBConnectionPool {
             throw new DBConnectionPoolException(
                     "connection is not in use!");
         }
-        connectionPool.add(connection);
+//        connectionPool.add(connection);
         usedConnections.remove(connection);
+//        try {
+//            connection.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+
     }
 
     public void terminate() {
@@ -90,4 +96,5 @@ public class SQLiteBasicDBConnectionPool extends BasicDBConnectionPool {
         }
         connectionPool.clear();
     }
+
 }

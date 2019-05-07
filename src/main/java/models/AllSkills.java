@@ -1,6 +1,7 @@
 package models;
 
 import datalayer.ConnectionPool;
+import datalayer.DBCPDBConnectionPool;
 import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
 import datalayer.dbConnection.BasicDBConnectionPool;
 import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
@@ -26,8 +27,8 @@ public class AllSkills {
             allskills = new Utility().getskilsnames( new Utility().jsonbufferstring(get_skills.getContent()));
 
             if(!cheaking_skillexit()) {
-                SQLiteBasicDBConnectionPool sqlInstance = ConnectionPool.getInstance();
-                Connection conn = sqlInstance.get();
+                Connection conn  =  DBCPDBConnectionPool. getConnection();
+
                 for (int i = 0; i < allskills.size(); i++) {
                     try {
                         PreparedStatement prepStmt = conn.prepareStatement("insert into Skill (id, name) VALUES (?,? )");
@@ -43,12 +44,15 @@ public class AllSkills {
                     }
 //                connection.get().commit("INSERT INTO Skill VALUES("+String(i) +"," + allskills.get(i).getName()+")");
                 }
-                sqlInstance.release(conn);
+//                sqlInstance.release(conn);
+                conn.close();
             }
 
 
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -63,21 +67,32 @@ public class AllSkills {
     private AllSkills() {
     }
     public boolean cheaking_skillexit(){
-        SQLiteBasicDBConnectionPool sqlInstance= ConnectionPool.getInstance();
-        Connection conn = sqlInstance.get();
+        Connection conn  = null;
+        try {
+            conn = DBCPDBConnectionPool.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         try {
             Statement stmt =conn.createStatement();
             ResultSet rs =stmt.executeQuery("select count (*) FROM Skill ");
-            sqlInstance.release(conn);
+
             if (rs.getString("count (*)").equals("0")){
+                conn.close();
                 return false;
             }
             else {
+                conn.close();
                 return true;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             return false;
         }
     }

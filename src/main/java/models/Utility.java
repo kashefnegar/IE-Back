@@ -1,6 +1,7 @@
 package models;
 
 import datalayer.ConnectionPool;
+import datalayer.DBCPDBConnectionPool;
 import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,14 +93,16 @@ public class Utility {
     @SuppressWarnings("unchecked")
     public ArrayList<Project> getprject(ArrayList<JSONObject> projectlist) {
         ArrayList<Project> project = new ArrayList<>();
-        for (JSONObject projasn : projectlist) {
 
-            SQLiteBasicDBConnectionPool sqlInstance = ConnectionPool.getInstance();
-            Connection conn = sqlInstance.get();
+
+        for (JSONObject projasn : projectlist) {
+            Connection conn  = null;
+//            Connection   conn = DBCPDBConnectionPool. getConnection()
             ArrayList<Object> resultdata = jsonparser(new ArrayList<>(Arrays.asList("id", "title"
                     , "description", "imageUrl", "deadline", "skills", "budget","creationDate")), projasn);
             System.out.println((String) resultdata.get(0));
             try {
+                conn = DBCPDBConnectionPool. getConnection();
                 PreparedStatement prepStmt = conn.prepareStatement("insert into Project (id, title, description, imgURL, budget, deadline,creationDate) VALUES (?,?,?,?,?,?,?)");
                 prepStmt.setString(1,(String) resultdata.get(0));
                 prepStmt.setString(2,(String) resultdata.get(1));
@@ -109,28 +112,42 @@ public class Utility {
                 prepStmt.setInt(6,(int) resultdata.get(6));
                 prepStmt.setLong(7,(long) resultdata.get(7));
                 prepStmt.executeUpdate();
+                conn.close();
 
 
             } catch (SQLException e) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
                 e.printStackTrace();
             }
-            finally {
-//                sqlInstance.release(conn);
-            }
+
+
+//                try {
+//                    conn.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
             for (int i=0; i<((ArrayList<Skills>)resultdata.get(5)).size() ; i++){
                 System.out.println(i);
-//                SQLiteBasicDBConnectionPool sqlInstance1 = ConnectionPool.getInstance();
-//                Connection conn1 = sqlInstance1.get();
+                Connection conn1 = null;
+                try {
+                    conn1 = DBCPDBConnectionPool. getConnection();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 try {
 
-                    PreparedStatement prepStmt = conn.prepareStatement("insert into ProjectSkill (ProjectID, SkillID, Point)VALUES (?,?,?)");
+                    PreparedStatement prepStmt = conn1.prepareStatement("insert into ProjectSkill (ProjectID, SkillID, Point)VALUES (?,?,?)");
                     prepStmt.setString(1,(String) resultdata.get(0));
                     int id=get_skilid((((ArrayList<Skills>) resultdata.get(5)).get(i).getName()));
                     if(id!=-1) {
                         prepStmt.setInt(2,id);
                     }
                     else{
-                        sqlInstance.release(conn);
+                       conn1.close();
                         continue;
 
                     }
@@ -140,32 +157,36 @@ public class Utility {
                     e.printStackTrace();
                 }
                 finally {
-//                    sqlInstance1.release(conn1);
+                    try {
+                        conn1.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
 
-
             project.add(new Project((String) resultdata.get(0), (String) resultdata.get(1), (String) resultdata.get(2)
                     , (String) resultdata.get(3), (long) resultdata.get(4)
                     , (ArrayList<Skills>) resultdata.get(5), (int) resultdata.get(6)));
-            sqlInstance.release(conn);
         }
-
         return project;
     }
-    public int get_skilid(String name) {
-        SQLiteBasicDBConnectionPool sqlInstance = ConnectionPool.getInstance();
-        Connection conn = sqlInstance.get();
+    public int get_skilid(String name) throws SQLException {
+        Connection conn  =  DBCPDBConnectionPool. getConnection();
         try {
             PreparedStatement prepStmt = conn.prepareStatement("select id FROM Skill where name=?");
             prepStmt.setString(1,name);
             ResultSet rs = prepStmt.executeQuery();
-            sqlInstance.release(conn);
-            return rs.getInt("id");
+
+//            sqlInstance.release(conn);
+            int result = rs.getInt("id");
+            conn.close();
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
-            sqlInstance.release(conn);
+            conn.close();
+//            sqlInstance.release(conn);
             return -1;
 
         }
