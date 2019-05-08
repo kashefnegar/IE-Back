@@ -118,8 +118,6 @@ public class Project {
         return true;
     }
 
-
-
     private int findskill(Register newuser, Skills aNeedskil){
         for (int i = 0; i<newuser.getSkill().size(); i++){
             if(newuser.getSkill().get(i).getName().equals(aNeedskil.getName()))
