@@ -56,7 +56,7 @@ public class Projects {
                                  rs.getString("description"),
                                  rs.getString("imgURL"),
                                  rs.getLong("deadline"),
-                                 ret_skill_prj_qury(rs.getString("id")),rs.getInt("budget"),
+                                 new Utility().ret_skill_prj_qury(rs.getString("id")),rs.getInt("budget"),
                                  rs.getLong("creationDate")));
 
                 }
@@ -71,25 +71,7 @@ public class Projects {
     private Projects() {
     }
 
-//    change to query type
-    public  ArrayList<Skills> ret_skill_prj_qury(String id) throws SQLException {
-        ArrayList<Skills> prSkill = new ArrayList<>();
-        Connection conn = DBCPDBConnectionPool. getConnection();
-        PreparedStatement prepStmt= conn.prepareStatement("select  sk.name,prs.Point \n" +
-                "FROM\n" +
-                "     ProjectSkill prs , Skill sk\n" +
-                "WHERE\n" +
-                "      ?= prs.ProjectID and\n" +
-                "      sk.id =prs.SkillID");
-        prepStmt.setString(1, id);
-        ResultSet skills= prepStmt.executeQuery();
-        while (skills.next()){
-            prSkill.add(new Skills(skills.getString("name"),skills.getInt("Point")));
-        }
-        conn.close();
-        return prSkill;
 
-    }
 
 // use in addproject , addbid, auction change for next faze!!!!!!!!!!!!!
     private int indexofstring(String comperstring){
@@ -129,7 +111,7 @@ public class Projects {
                     rs.getString("description"),
                     rs.getString("imgURL"),
                     rs.getLong("deadline"),
-                    ret_skill_prj_qury(rs.getString("id")),rs.getInt("budget"),
+                    new Utility().ret_skill_prj_qury(rs.getString("id")),rs.getInt("budget"),
                     rs.getLong("creationDate")
             );
 
@@ -225,4 +207,6 @@ public class Projects {
         return "models.Project not Found";
 
     }
+
+
 }

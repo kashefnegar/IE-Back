@@ -186,4 +186,50 @@ public class Utility {
         }
 
     }
+
+    public ArrayList<Project>  search_project(String name){
+        ArrayList<Project> proj_want = new ArrayList<>();
+        try {
+            Connection conn  =  DBCPDBConnectionPool. getConnection();
+            PreparedStatement prepStmt = conn.prepareStatement("select * FROM Project where name=? OR description=?");
+            prepStmt.setString(1,name);
+            prepStmt.setString(2,name);
+            ResultSet rs =prepStmt.executeQuery();
+            while (rs.next()){
+                proj_want.add(new Project(
+                        rs.getString("id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("imgURL"),
+                        rs.getLong("deadline"), ret_skill_prj_qury(rs.getString("id")),rs.getInt("budget"),
+                        rs.getLong("creationDate")));
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return proj_want;
+
+    }
+    //    change to query type
+    public  ArrayList<Skills> ret_skill_prj_qury(String id) throws SQLException {
+        ArrayList<Skills> prSkill = new ArrayList<>();
+        Connection conn = DBCPDBConnectionPool. getConnection();
+        PreparedStatement prepStmt= conn.prepareStatement("select  sk.name,prs.Point \n" +
+                "FROM\n" +
+                "     ProjectSkill prs , Skill sk\n" +
+                "WHERE\n" +
+                "      ?= prs.ProjectID and\n" +
+                "      sk.id =prs.SkillID");
+        prepStmt.setString(1, id);
+        ResultSet skills= prepStmt.executeQuery();
+        while (skills.next()){
+            prSkill.add(new Skills(skills.getString("name"),skills.getInt("Point")));
+        }
+        conn.close();
+        return prSkill;
+
+    }
 }
