@@ -1,12 +1,6 @@
 package models;
 
-import datalayer.ConnectionPool;
 import datalayer.DBCPDBConnectionPool;
-import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
-import datalayer.dbConnection.BasicDBConnectionPool;
-import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
-import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;

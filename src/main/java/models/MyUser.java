@@ -10,9 +10,11 @@ public class MyUser {
     }
 
     static private ArrayList<Register> myusers = new ArrayList<>() ;
+
     public ArrayList<Register> getUsers(){
         return myusers;
     }
+
     public static MyUser getInstance() {
         if(ourInstance == null) {
             ourInstance = new MyUser();
@@ -22,6 +24,7 @@ public class MyUser {
 
     private MyUser() {
     }
+
     public void adduser(Register newuser){
         int index = indexofstring(newuser.getId() );
         if(index == -1) {
@@ -44,6 +47,8 @@ public class MyUser {
         }
         return null;
     }
+
+//    don't need any more
     public static void addTempUser(){
 
         Skills first = new Skills("HTML" , 5 );
