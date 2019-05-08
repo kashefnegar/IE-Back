@@ -1,8 +1,13 @@
 package models;
 
+import datalayer.DBCPDBConnectionPool;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Projects {
@@ -14,8 +19,70 @@ public class Projects {
     }
 
     public  ArrayList<Project> getProjects(){
-        return projects;
+        Connection conn = null;
+        try {
+            conn = DBCPDBConnectionPool. getConnection();
+            PreparedStatement prepStmt = conn.prepareStatement("select pr.id ,pr.title ,pr.description,pr.imgURL, pr.deadline, pr.creationDate,pr.budget\n" +
+                    "FROM\n" +
+                    "     Project pr\n" +
+                    "order by pr.creationDate\n");
+            ResultSet projects =prepStmt.executeQuery();
+            this.projects=project_list_from_sql(projects);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  this.projects;
+
     }
+
+    public ArrayList<Project>  project_list_from_sql( ResultSet rs){
+        ArrayList<Project> projects_list = new ArrayList<>();
+        try {
+//            if (rs.first()) {
+                System.out.println("!!!!!!!!!!!!!");
+                String  id = "";
+
+                while (rs.next()) {
+                    ArrayList<Skills> prSkill = new ArrayList<>();
+                   Connection conn = DBCPDBConnectionPool. getConnection();
+                    PreparedStatement prepStmt= conn.prepareStatement("select  sk.name,prs.Point \n" +
+                           "FROM\n" +
+                           "     ProjectSkill prs , Skill sk\n" +
+                           "WHERE\n" +
+                           "      ?= prs.ProjectID and\n" +
+                           "      sk.id =prs.SkillID");
+                   prepStmt.setString(1, rs.getString("id"));
+                   ResultSet skills= prepStmt.executeQuery();
+                   while (skills.next()){
+                       prSkill.add(new Skills(skills.getString("name"),skills.getInt("Point")));
+                   }
+                   conn.close();
+
+                    System.out.println("hi");
+                         projects_list.add( new Project(
+                                 rs.getString("id"),
+                                 rs.getString("title"),
+                                 rs.getString("description"),
+                                 rs.getString("imgURL"),
+                                 rs.getLong("deadline"),
+                                 prSkill,rs.getInt("budget"),
+                                 rs.getLong("creationDate")));
+
+                }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            return projects_list;
+        }
+    }
+
     private Projects() {
     }
 
@@ -27,6 +94,7 @@ public class Projects {
             return -1;
 
     }
+
     public int getProjectIndexByID(String id){
         for (int i = 0 ; i < projects.size() ; i++) {
             if(projects.get(i).getId().equals(id)){
@@ -42,6 +110,7 @@ public class Projects {
             return this.projects.get(index);
         else return null;
     }
+
     public boolean hasNecessarySkills(String  id , Register user){
         boolean projectFound = false;
         boolean enoughSkill = true;
@@ -73,6 +142,7 @@ public class Projects {
         return false;
 
     }
+
     public void get_project_url(String url){
         MyHttpURLConnection get_projects = new MyHttpURLConnection();
         try {
@@ -83,6 +153,7 @@ public class Projects {
         }
 
     }
+
     void addproject(Project newproject){
         int index = indexofstring(newproject.getTitle());
         if(index == -1) {
@@ -108,6 +179,7 @@ public class Projects {
             return false;
         }
     }
+
     String auction(String commandData){
         JSONObject object = new Utility().jsonstring(commandData);
         int index1 = indexofstring(object.getString("projectTitle"));

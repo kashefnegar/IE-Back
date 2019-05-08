@@ -11,13 +11,25 @@ public class Project {
     private String title;
     private String description;
 
-   public String getImageURL() {
+    public long getCreationDate() {
+        return creationDate;
+    }
+
+    public Register getWinner() {
+        return winner;
+    }
+
+    private long creationDate;
+
+    public String getImageURL() {
         return imageURL;
     }
 
     private String imageURL;
     private long deadline;
     private Register winner;
+
+
     private ArrayList<Skills> needskil;
     private int budget;
 
@@ -49,6 +61,19 @@ public class Project {
         this.budget = budget;
         this.userREQ = new ArrayList<>();
     }
+
+    public Project(String id, String title, String description, String imageURL, long deadline, ArrayList<Skills> needskil, int budget,long creationDate) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.deadline = deadline;
+        this.needskil = needskil;
+        this.budget = budget;
+        this.userREQ = new ArrayList<>();
+        this.creationDate = creationDate;
+    }
+
     public String getId() { return id; }
 
     public String getTitle() {
