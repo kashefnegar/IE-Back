@@ -2,7 +2,6 @@ package models;
 
 import datalayer.DBCPDBConnectionPool;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +17,7 @@ public class Projects {
         return ourInstance;
     }
 
+//    change to query type
     public  ArrayList<Project> getProjects(){
         Connection conn = null;
         try {
@@ -41,10 +41,10 @@ public class Projects {
 
     }
 
+//    change to query type
     public ArrayList<Project>  project_list_from_sql( ResultSet rs){
         ArrayList<Project> projects_list = new ArrayList<>();
         try {
-//            if (rs.first()) {
                 System.out.println("!!!!!!!!!!!!!");
                 String  id = "";
 
@@ -71,6 +71,7 @@ public class Projects {
     private Projects() {
     }
 
+//    change to query type
     public  ArrayList<Skills> ret_skill_prj_qury(String id) throws SQLException {
         ArrayList<Skills> prSkill = new ArrayList<>();
         Connection conn = DBCPDBConnectionPool. getConnection();
@@ -89,6 +90,7 @@ public class Projects {
         return prSkill;
 
     }
+
 // use in addproject , addbid, auction change for next faze!!!!!!!!!!!!!
     private int indexofstring(String comperstring){
             for (int i=0; i<projects.size(); i++){
@@ -99,6 +101,7 @@ public class Projects {
 
     }
 
+    // doesn't need change we dont use it any more
     public int getProjectIndexByID(String id){
 
         for (int i = 0 ; i < projects.size() ; i++) {
@@ -109,6 +112,7 @@ public class Projects {
         return -1;
     }
 
+//    changed to query type
     public Project getProjectIndex(String id){
 
         Connection conn = null;
@@ -140,6 +144,7 @@ public class Projects {
 //        else return null;
     }
 
+//!!!!!!!!!!!!!!!!!!
     public boolean hasNecessarySkills(String  id , Register user){
         boolean projectFound = false;
         boolean enoughSkill = true;
@@ -172,6 +177,7 @@ public class Projects {
 
     }
 
+    // doesn't need change
     public void get_project_url(String url){
         MyHttpURLConnection get_projects = new MyHttpURLConnection();
         try {

@@ -1,13 +1,11 @@
 package models;
 
-import datalayer.ConnectionPool;
+
 import datalayer.DBCPDBConnectionPool;
-import datalayer.dbConnection.impl.SQLiteBasicDBConnectionPool;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.Connection;
@@ -21,11 +19,12 @@ public class Utility {
 
     public Utility() {
     }
-
+    // doesn't need change
     public JSONObject jsonstring(String commandData){
         JSONTokener tokener = new JSONTokener(commandData);
         return new JSONObject(tokener);
     }
+
     // doesn't need change
     ArrayList<JSONObject> jsonbufferstring( StringBuffer commandData){
         ArrayList<JSONObject> jsonobjects = new ArrayList<>();
