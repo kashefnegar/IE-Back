@@ -26,6 +26,7 @@ public class Utility {
         JSONTokener tokener = new JSONTokener(commandData);
         return new JSONObject(tokener);
     }
+    // doesn't need change
     ArrayList<JSONObject> jsonbufferstring( StringBuffer commandData){
         ArrayList<JSONObject> jsonobjects = new ArrayList<>();
         JSONArray arr = new JSONArray(commandData.toString());
@@ -34,7 +35,9 @@ public class Utility {
         }
         return jsonobjects;
     }
+
 //    @SuppressWarnings("unchecked")
+//   !!!!!!!!!!!!!!!!!!!
     public Register getDefultUser(String path)throws FileNotFoundException {
 //        JSONTokener tokener = new JSONTokener(new FileReader("D:/University/3971-2/IE/Projects/3/CA3/ca3/ca1/defultuser.json"));
         JSONTokener tokener = new JSONTokener(new FileReader(path));
@@ -45,6 +48,7 @@ public class Utility {
                             ,(String)info.get(4),(ArrayList<Skills>)info.get(5),(String)info.get(6));
     }
 
+    // doesn't need change
     public ArrayList<Object> jsonparser(ArrayList<String> data, JSONObject object)throws JSONException {
             ArrayList<Object> resultdata = new ArrayList<>();
             for (String aData : data) {
@@ -73,6 +77,7 @@ public class Utility {
         return resultdata;
     }
 
+    // doesn't need change
     public ArrayList<Skills> getskillsarrya(JSONObject object) {
         ArrayList<Skills> skills = new ArrayList<>();
         JSONArray myskills = object.getJSONArray("skills");
@@ -82,6 +87,7 @@ public class Utility {
         return skills;
     }
 
+// doesn't need change
     public ArrayList<Skills> getskilsnames(ArrayList<JSONObject> nameskils){
         ArrayList<Skills> skills = new ArrayList<>();
         for (JSONObject nameskil : nameskils) {
@@ -91,6 +97,7 @@ public class Utility {
     }
 
     @SuppressWarnings("unchecked")
+//    changed to query type
     public ArrayList<Project> getprject(ArrayList<JSONObject> projectlist) {
         ArrayList<Project> project = new ArrayList<>();
         for (JSONObject projasn : projectlist) {
@@ -158,6 +165,8 @@ public class Utility {
         }
         return project;
     }
+
+//    change to query type
     public int get_skilid(String name) throws SQLException {
         Connection conn  =  DBCPDBConnectionPool. getConnection();
         try {

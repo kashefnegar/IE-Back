@@ -19,7 +19,7 @@ public class AllSkills {
     public ArrayList<Skills> getAllskills() {
         return allskills;
     }
-
+//change to quey type
     public void setAllskills() {
         MyHttpURLConnection get_skills = new MyHttpURLConnection();
         try {
@@ -35,16 +35,11 @@ public class AllSkills {
                         prepStmt.setInt(1,i+1);
                         prepStmt.setString(2,allskills.get(i).getName());
                         prepStmt.executeUpdate();
-//                        Statement stmt = conn.createStatement();
-//                        stmt.executeQuery("INSERT" +
-//                                " INTO Skill" +
-//                                " VALUES (i+1,allskills.get(i).getName())");
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-//                connection.get().commit("INSERT INTO Skill VALUES("+String(i) +"," + allskills.get(i).getName()+")");
                 }
-//                sqlInstance.release(conn);
                 conn.close();
             }
 
@@ -57,15 +52,18 @@ public class AllSkills {
         }
 
     }
+
     public void setUrl(String url) {
         AllSkills.url = url;
     }
+
     public  static AllSkills getInstance() {
         return ourInstance;
     }
 
     private AllSkills() {
     }
+    //change to quey type
     public boolean cheaking_skillexit(){
         Connection conn  = null;
         try {
