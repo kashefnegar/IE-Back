@@ -50,7 +50,6 @@ public class MyUser {
 
 //    don't need any more
     public static void addTempUser(){
-
         Skills first = new Skills("HTML" , 5 );
         Skills second = new Skills("JavaScript" , 4 );
         Skills third = new Skills("C++" , 2 );

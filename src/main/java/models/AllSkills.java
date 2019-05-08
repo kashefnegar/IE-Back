@@ -47,10 +47,12 @@ public class AllSkills {
 
     }
 
+    // doesn't need change
     public void setUrl(String url) {
         AllSkills.url = url;
     }
 
+    // doesn't need change
     public  static AllSkills getInstance() {
         return ourInstance;
     }
