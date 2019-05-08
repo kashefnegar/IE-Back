@@ -93,11 +93,8 @@ public class Utility {
     @SuppressWarnings("unchecked")
     public ArrayList<Project> getprject(ArrayList<JSONObject> projectlist) {
         ArrayList<Project> project = new ArrayList<>();
-
-
         for (JSONObject projasn : projectlist) {
             Connection conn  = null;
-//            Connection   conn = DBCPDBConnectionPool. getConnection()
             ArrayList<Object> resultdata = jsonparser(new ArrayList<>(Arrays.asList("id", "title"
                     , "description", "imageUrl", "deadline", "skills", "budget","creationDate")), projasn);
             System.out.println((String) resultdata.get(0));
@@ -114,7 +111,6 @@ public class Utility {
                 prepStmt.executeUpdate();
                 conn.close();
 
-
             } catch (SQLException e) {
                 try {
                     conn.close();
@@ -124,12 +120,6 @@ public class Utility {
                 e.printStackTrace();
             }
 
-
-//                try {
-//                    conn.close();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
             for (int i=0; i<((ArrayList<Skills>)resultdata.get(5)).size() ; i++){
                 System.out.println(i);
                 Connection conn1 = null;
@@ -165,10 +155,6 @@ public class Utility {
                 }
 
             }
-
-            project.add(new Project((String) resultdata.get(0), (String) resultdata.get(1), (String) resultdata.get(2)
-                    , (String) resultdata.get(3), (long) resultdata.get(4)
-                    , (ArrayList<Skills>) resultdata.get(5), (int) resultdata.get(6)));
         }
         return project;
     }
