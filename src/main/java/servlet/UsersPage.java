@@ -25,26 +25,14 @@ public class UsersPage extends MyServlet {
     ) throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         JSONObject resp_massage = new JSONObject();
-
-//        System.out.println("in servlet");
-
         ArrayList<Register> users = MyUser.getInstance().getUsers();
         if(users == null){
             System.out.println("null pointer");
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             resp_massage.put("massage","user found");
-//            return;
-//            response.sendError(403);
         }
         else {
             resp_massage.put("users",new JSONArray(users));
-
-//            System.out.println("give array");
-//            return;
-//            System.out.println(users.toArray().toString() + "servlet");
-//            request.setAttribute("usersList", users);
-//            RequestDispatcher view = getServletContext().getRequestDispatcher("/UserPage.jsp");
-//            view.forward(request, response);
         }
         PrintWriter out = response.getWriter();
 
