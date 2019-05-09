@@ -11,6 +11,7 @@ public class  Register {
     private ArrayList<Skills> Skill;
     private String username;
     private String bio;
+    private String password;
 
     public String getProfilePictureURL() {
         return profilePictureURL;
@@ -24,6 +25,21 @@ public class  Register {
         this.profilePictureURL = profilePictureURL;
         this.Skill = skill;
         this.bio = bio;
+    }
+
+    Register(String id, String firstName, String lastName, String jobTitle, String profilePictureURL, String bio,String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
+        this.profilePictureURL = profilePictureURL;
+        this.bio = bio;
+        this.password = new Utility().set_passeord_increption(password);
+
+    }
+
+    public String getPassword(){
+        return this.password;
     }
     public boolean isActive(){
         Register active = MyUser.getInstance().getMyusers_reg(0);
