@@ -206,9 +206,9 @@ public class Utility {
         ArrayList<Project> proj_want = new ArrayList<>();
         try {
             Connection conn  =  DBCPDBConnectionPool. getConnection();
-            PreparedStatement prepStmt = conn.prepareStatement("select * FROM Project where name=? OR description=?");
-            prepStmt.setString(1,name);
-            prepStmt.setString(2,name);
+            PreparedStatement prepStmt = conn.prepareStatement("select * FROM Project where title LIKE ? OR description LIKE ?");
+            prepStmt.setString(1,'%'+name+'%');
+            prepStmt.setString(2,'%'+name+'%');
             ResultSet rs =prepStmt.executeQuery();
             while (rs.next()){
                 proj_want.add(new Project(

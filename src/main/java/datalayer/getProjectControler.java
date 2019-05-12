@@ -21,7 +21,7 @@ public class getProjectControler {
             }
         };
         final ScheduledFuture<?> beeperHandle =
-                scheduler.scheduleAtFixedRate(beeper, 1 ,8999, SECONDS);
+                scheduler.scheduleAtFixedRate(beeper, 1 ,5, MINUTES);
         scheduler.schedule(new Runnable() {
             public void run() { beeperHandle.cancel(true); }
         }, 60 * 60, SECONDS);

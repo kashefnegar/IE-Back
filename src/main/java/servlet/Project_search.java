@@ -30,7 +30,8 @@ public class Project_search extends MyServlet {
             resp_massage.put("massage", "no project found with this descriptions");
         }
         else {
-            resp_massage.put("users", new JSONArray(prj));
+            System.out.println(prj.size());
+            resp_massage.put("projects", new JSONArray(prj));
         }
         PrintWriter out = response.getWriter();
 
