@@ -18,6 +18,7 @@ import java.security.spec.KeySpec;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class Utility {
     byte[] salt;
@@ -51,6 +52,7 @@ public class Utility {
         return new Register((String)info.get(0),(String)info.get(1),(String)info.get(2),(String)info.get(3)
                             ,(String)info.get(4),(ArrayList<Skills>)info.get(5),(String)info.get(6));
     }
+
     public Register getuser(String body)throws FileNotFoundException {
 //        JSONTokener tokener = new JSONTokener(new FileReader("D:/University/3971-2/IE/Projects/3/CA3/ca3/ca1/defultuser.json"));
         JSONTokener tokener = new JSONTokener(body);
@@ -61,6 +63,7 @@ public class Utility {
         return new Register((String)info.get(0),(String)info.get(1),(String)info.get(2),(String)info.get(3)
                 ,(String)info.get(4),(String)info.get(5),(String)info.get(6));
     }
+
 
     // doesn't need change
     public ArrayList<Object> jsonparser(ArrayList<String> data, JSONObject object)throws JSONException {
@@ -202,6 +205,7 @@ public class Utility {
 
     }
 
+// change to query type
     public ArrayList<Project>  search_project(String name){
         ArrayList<Project> proj_want = new ArrayList<>();
         try {
@@ -270,49 +274,17 @@ public class Utility {
             return false;
         }
     }
-
-    public String set_passeord_increption(String password){
-        try {
-            Connection conn = DBCPDBConnectionPool.getConnection();
-            Statement stmt =conn.createStatement();
-            ResultSet rs =stmt.executeQuery("select count (*),randomgenerat FROM information");
-            if (rs.getString("count (*)").equals("0")){
-                conn.close();
-                System.out.println("password");
-                SecureRandom random = new SecureRandom();
-                this.salt =new byte[16];
-                random.nextBytes(this.salt);
-                Connection conn1 = DBCPDBConnectionPool.getConnection();
-                PreparedStatement prepStmt1= conn1.prepareStatement("INSERT INTO information" +
-                        " (randomgenerat) values (?)");
-                prepStmt1.setString(1,this.salt.toString());
-                prepStmt1.executeUpdate();
-                conn1.close();
-            }
-            else {
-               this.salt =rs.getString("randomgenerat").getBytes();
-                conn.close();
-            }
-            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-            return factory.generateSecret(spec).getEncoded().toString();
-
-        }catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+    private static byte[] fromString(String string) {
+        String[] strings = string.replace("[", "").replace("]", "").split(", ");
+        byte[] result = new byte[strings.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = (byte) Integer.parseInt(strings[i]);
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-        return "";
-
+        return result;
     }
 
-//    public void generat_pass(){
-//
-//    }
-
+    public String set_passeord_increption(String password){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);}
 }
+
