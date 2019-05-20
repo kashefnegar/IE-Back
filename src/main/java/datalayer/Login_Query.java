@@ -17,8 +17,11 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 public class Login_Query {
-    String username;
-    String password;
+    private String username;
+    private String password;
+    public String get_username (){
+        return this.username;
+    }
     public Login_Query(String body){
         JSONObject info =new Utility().jsonstring(body);
         this.username = info.getString("username");

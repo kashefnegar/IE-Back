@@ -3,11 +3,9 @@ package servlet;
 
 import com.google.common.io.CharStreams;
 import datalayer.Login_Query;
-import models.*;
+import servlet.mytools.jwt_handler;
 import org.json.JSONObject;
-import servlet.mytools.Project_page_tool;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,9 +35,11 @@ public class Login extends MyServlet{
 
         String body = CharStreams.toString(request.getReader());
 //        System.out.println(body);
-        if( new Login_Query(body).passwordcheak()){
+        Login_Query user_ = new Login_Query(body);
+        if( user_.passwordcheak()){
             resp_massage.put("massage","logined");
             response.setStatus(HttpServletResponse.SC_OK);
+            resp_massage.put("jwt",new jwt_handler().createJWT(user_.get_username(),"joboonja","user",1000000));
         }
         else {
             resp_massage.put("massage","invalid username or password");
