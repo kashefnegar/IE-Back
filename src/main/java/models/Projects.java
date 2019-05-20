@@ -105,18 +105,25 @@ public class Projects {
             );
             prepStmt.setString(1,id);
             ResultSet rs= prepStmt.executeQuery();
-            return new Project(
+            Project newproj =new Project(
                     rs.getString("id"),
                     rs.getString("title"),
                     rs.getString("description"),
                     rs.getString("imgURL"),
                     rs.getLong("deadline"),
-                    new Utility().ret_skill_prj_qury(rs.getString("id")),rs.getInt("budget"),
+                    new Utility().ret_skill_prj_qury(rs.getString("id")),rs.getLong("budget"),
                     rs.getLong("creationDate")
             );
+            conn.close();
+            return newproj;
 
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             return null;
         }
 

@@ -31,7 +31,7 @@ public class Project {
 
 
     private ArrayList<Skills> needskil;
-    private int budget;
+    private long budget;
 
     public ArrayList<ReqUser> getUserREQ() {
         return userREQ;
@@ -62,7 +62,7 @@ public class Project {
         this.userREQ = new ArrayList<>();
     }
 
-    public Project(String id, String title, String description, String imageURL, long deadline, ArrayList<Skills> needskil, int budget,long creationDate) {
+    public Project(String id, String title, String description, String imageURL, long deadline, ArrayList<Skills> needskil, long budget,long creationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -88,7 +88,7 @@ public class Project {
         return needskil;
     }
 
-    public int getBudget() {
+    public long getBudget() {
         return budget;
     }
 
