@@ -19,27 +19,29 @@ import java.util.Arrays;
 public class Login_Query {
     private String username;
     private String password;
-    public String get_username (){
+
+    public String get_username() {
         return this.username;
     }
-    public Login_Query(String body){
-        JSONObject info =new Utility().jsonstring(body);
+
+    public Login_Query(String body) {
+        JSONObject info = new Utility().jsonstring(body);
         this.username = info.getString("username");
         this.password = info.getString("password");
     }
 
-    public boolean passwordcheak(){
+    public boolean passwordcheak() {
 
         Connection conn = null;
         try {
-            conn = DBCPDBConnectionPool. getConnection();
+            conn = DBCPDBConnectionPool.getConnection();
             PreparedStatement prepStmt = conn.prepareStatement("SELECT password FROM User where id=?");
-            prepStmt.setString(1,username);
-            ResultSet rs=prepStmt.executeQuery();
+            prepStmt.setString(1, username);
+            ResultSet rs = prepStmt.executeQuery();
 
-            if ( new BCryptPasswordEncoder().matches(this.password,rs.getString("password"))){
+            if (new BCryptPasswordEncoder().matches(this.password, rs.getString("password"))) {
                 conn.close();
-                    return true;
+                return true;
             }
             conn.close();
             return false;
