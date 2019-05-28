@@ -1,3 +1,5 @@
+package servlet;
+
 import models.MyUser;
 import models.Project;
 import models.Projects;
@@ -14,7 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-@WebServlet(name = "Servlet_projects", urlPatterns = "/projects/*")
+@WebServlet(name = "servlet.Servlet_projects", urlPatterns = "/projects/*")
 public class Servlet_projects extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -36,11 +38,11 @@ public class Servlet_projects extends HttpServlet {
             Register user_index = user.FindUser( ((Register)request.getAttribute("user")).getId() );
 
             for (int i=0; i<allprjects.size(); i++){
-                if( Projects.getInstance().hasNecessarySkills(allprjects.get(i).getId(),
-                       user_index) ){
+//                if( Projects.getInstance().hasNecessarySkills(allprjects.get(i).getId(),
+//                       user_index) ){
                     progect_can_see.add( allprjects.get(i));
 
-                }
+//                }
             }
 
 
