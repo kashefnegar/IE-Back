@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    # will build ./docker/web/Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/code
+  react:
+    build:
+      context: /Users/md/Downloads/Front/ca6/
+      dockerfile: Dockerfile
+    volumes:
+        - /app
+        - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+
+
+#  db:
+#    # will build ./docker/db/Dockerfile
+#    build: ./docker/db
+#    ports:
+#      - "3306:3306"
